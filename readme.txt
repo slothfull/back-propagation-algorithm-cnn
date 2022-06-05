@@ -9,13 +9,16 @@
 
 
 # [文件说明] 总共含有6个 .m 文件
-  CNN_upweight.m: -> 神经网络backprogation误差反向传播推演函数 用于推导每次训练时 后一层(相对)的误差反向传播到前一层后的大小。
-  LeNet_5.m  ->  LeNet_5的正向inference网络结构的定义 + MINST数据集的预加载 + 反向传播算法的调用(神经网络的训练) + 神经网络在测试数据集上的测试(仅涉及inference)
-  convolution.m  ->  2d卷积操作的inference实现 
+  CNN_upweight.m:   -> 神经网络backprogation误差反向传播推演函数 用于推导每次训练时 后一层(相对)的误差反向传播到前一层后的大小。
+  LeNet_5.m         ->  + LeNet_5的正向inference网络结构的定义
+                        + MINST数据集的预加载 
+                        + 反向传播算法的调用(神经网络的训练)
+                        + 神经网络在测试数据集上的测试(仅涉及inference)
+  convolution.m     ->  2d卷积操作的inference实现 
   convolution_f1.m  ->  LeNet_5中全连接层(fully-connected lay)的inference实现
-  init_kernel.m  ->  5x5 以及 12x12 尺寸的神经网络卷积算子初始化函数 (注意卷积算子在初始化时需要进行归一化)
-  mnist.mat  ->  MNIST公知手写数字数据集本地文件
-  pooling.m  ->  LeNet网络结构中池化层的实现 (抑制过拟合，神经网络参数稀疏化)
+  init_kernel.m     ->  5x5 以及 12x12 尺寸的神经网络卷积算子初始化函数 (注意卷积算子在初始化时需要进行归一化)
+  mnist.mat         ->  MNIST公知手写数字数据集本地文件
+  pooling.m         ->  LeNet网络结构中池化层的实现 (抑制过拟合，神经网络参数稀疏化)
 
 
 # [数据配置] 
