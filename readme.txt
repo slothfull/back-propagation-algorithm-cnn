@@ -9,7 +9,7 @@
 
 
 # [文件说明] 总共含有6个 .m 文件
-  CNN_upweight.m:   -> 神经网络backprogation误差反向传播推演函数 用于推导每次训练时 后一层(相对)的误差反向传播到前一层后的大小。
+  CNN_upweight.m:   -> 神经网络backprogation误差反向传播推演函数 用于推导每次训练时 后一层的误差反向传播到前一层后的大小
   LeNet_5.m         ->  + LeNet_5的正向inference网络结构的定义
                         + MINST数据集的预加载 
                         + 反向传播算法的调用(神经网络的训练)
