@@ -40,4 +40,7 @@
   训练时间大约需要 8.544975e+02 seconds 测试时间大约需要 8.956718e+00 seconds
 
 
-
+# [关于github仓库提交出现问题 -> remote: Support for password authentication was removed on August 13, 2021.]
+  cd github settings & cd developer settings & generate new tmp token -> <your token>
+  git remote set-url origin  https://<your_token>@github.com/<USERNAME>/<REPO>.git
+  git push origin main
