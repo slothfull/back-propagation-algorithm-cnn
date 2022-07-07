@@ -1,48 +1,55 @@
-function [kernel_c1,kernel_f1,weight_f1,weight_output,bias_c1,bias_f1]=CNN_upweight(yita,Error_cost,classify,train_data,state_c1,state_s1,state_f1,state_f1_temp,...
-                                                                                                output,kernel_c1,kernel_f1,weight_f1,weight_output,bias_c1,bias_f1)
-%%% parameter update function(weights & kernel)
-%% number of nodes
-layer_c1_num=size(state_c1,3);
-layer_s1_num=size(state_s1,3);
-layer_f1_num=size(state_f1,2);
-layer_output_num=size(output,2);
+% --- Convolutional Network Backpropagation Algorithm Func ---
+function [kernel_c1, kernel_f1, weight_f1, weight_output, bias_c1, bias_f1] = ...
+CNN_upweight(yita, Error_cost, classify, train_data, state_c1, state_s1, state_f1, state_f1_temp,...
+output,kernel_c1,kernel_f1,weight_f1,weight_output,bias_c1,bias_f1)
 
-[c1_row,c1_col,~]=size(state_c1);
-[s1_row,s1_col,~]=size(state_s1);
+% --- parameter update for function(weights & kernel) ---
+% --- number of nodes ---
+layer_c1_num = size(state_c1, 3);
+layer_s1_num = size(state_s1, 3);
+layer_f1_num = size(state_f1, 2);
+layer_output_num = size(output, 2);
 
-[kernel_c1_row,kernel_c1_col]=size(kernel_c1(:,:,1));
-[kernel_f1_row,kernel_f1_col]=size(kernel_f1(:,:,1));
-%% save the weights of network
-kernel_c1_temp=kernel_c1;
-kernel_f1_temp=kernel_f1;
+[c1_row, c1_col, ~] = size(state_c1);
+[s1_row, s1_col, ~] = size(state_s1);
 
-weight_f1_temp=weight_f1;
-weight_output_temp=weight_output;
-%% Error computing
-label=zeros(1,layer_output_num);
-label(1,classify+1)=1;
-delta_layer_output=output-label;
-%% updating weight_output
+[kernel_c1_row, kernel_c1_col] = size(kernel_c1(:,:,1));
+[kernel_f1_row, kernel_f1_col] = size(kernel_f1(:,:,1));
+
+% --- save the weights of network ---
+kernel_c1_temp = kernel_c1;
+kernel_f1_temp = kernel_f1;
+
+weight_f1_temp = weight_f1;
+weight_output_temp = weight_output;
+
+% --- Error computing ---
+label = zeros(1, layer_output_num);
+label(1, classify+1) = 1;
+delta_layer_output = output-label;
+
+% --- updating weight_output ---
 for n=1:layer_output_num
     delta_weight_output_temp(:,n)=delta_layer_output(1,n)*state_f1';
 end
-weight_output_temp=weight_output_temp-yita*delta_weight_output_temp;
+weight_output_temp = weight_output_temp-yita*delta_weight_output_temp;
 
-%% updating bias_f1&kernel_f1
+% --- updating bias_f1 & kernel_f1 ---
 for n=1:layer_f1_num
     count=0;
     for m=1:layer_output_num
         count=count+delta_layer_output(1,m)*weight_output(n,m);
     end
-    %bias_f1
+    % bias_f1
     delta_layer_f1(1,n)=count*(1-tanh(state_f1(1,n)).^2);
     delta_bias_f1(1,n)=delta_layer_f1(1,n);
-    %kernel_f1
+    % kernel_f1
     delta_kernel_f1_temp(:,:,n)=delta_layer_f1(1,n)*state_f1_temp(:,:,n);
 end
 bias_f1=bias_f1-yita*delta_bias_f1;
 kernel_f1_temp=kernel_f1_temp-yita*delta_kernel_f1_temp;
-%% updating weight_f1
+
+% --- updating weight_f1 ---
 for n=1:layer_f1_num
     delta_layer_f1_temp(:,:,n)=delta_layer_f1(1,n)*kernel_f1(:,:,n);
 end
@@ -53,7 +60,7 @@ for n=1:layer_s1_num
 end
 weight_f1_temp=weight_f1_temp-yita*delta_weight_f1_temp;
 
-%% updating bias_c1
+% --- updating bias_c1 ---
 for n=1:layer_s1_num
     count=0;
     for m=1:layer_f1_num
@@ -64,13 +71,14 @@ for n=1:layer_s1_num
     delta_bias_c1(1,n)=sum(sum(delta_layer_c1(:,:,n)));
 end
 bias_c1=bias_c1-yita*delta_bias_c1;
-%% updating kernel_c1
+
+% --- updating kernel_c1 ---
 for n=1:layer_c1_num
     delta_kernel_c1_temp(:,:,n)=rot90(conv2(train_data,rot90(delta_layer_c1(:,:,n),2),'valid'),2);
 end
 kernel_c1_temp=kernel_c1_temp-yita*delta_kernel_c1_temp;
 
-%% updating weights of network
+% --- updating weights of network ---
 kernel_c1=kernel_c1_temp;
 kernel_f1=kernel_f1_temp;
 
@@ -78,3 +86,4 @@ weight_f1=weight_f1_temp;
 weight_output=weight_output_temp;
 
 end
+

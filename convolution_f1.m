@@ -1,16 +1,29 @@
-function [state_f1,state_f1_temp]=convolution_f1(state_s1,kernel_f1,weight_f1)
-%% full-connected layer function
-layer_f1_num=size(weight_f1,2);
-layer_s1_num=size(weight_f1,1);
+% --- convolution 2d ---
+% mention <m> is from 1 to 28-5+1:
+% this means that this conv is like:
+%              x x x x x                o o o x x     
+%              x x x x x                o o o x x      m x x 
+% primary img: x x x x x  conv kernel:  o o o x x ->   x x x  ...
+%              x x x x x                x x x x x      x x x 
+%              x x x x x                x x x x x     
+%
+% but not like: then m from 1 to 28
+%                                      o o o
+%              x x x x x               o o o x x x    m x x x x 
+%              x x x x x               o o o x x x    x x x x x
+% primary img: x x x x x  conv kernel:   x x x x x -> x x x x x ...
+%              x x x x x                 x x x x x    x x x x x
+%              x x x x x                 x x x x x    x x x x x
 
-%%
-for n=1:layer_f1_num
-    count=0;
-    for m=1:layer_s1_num
-        temp=state_s1(:,:,m)*weight_f1(m,n);
-        count=count+temp;
+
+% --- computing convolution results ---
+function [state] = convolution(data, kernel)
+[data_row,data_col] = size(data);
+[kernel_row,kernel_col] = size(kernel);
+for m=1:data_col-kernel_col+1
+    for n=1:data_row-kernel_row+1
+        state(m,n) = sum(sum(data(m:m+kernel_row-1, n:n+kernel_col-1).*kernel));
     end
-    state_f1_temp(:,:,n)=count;
-    state_f1(:,:,n)=convolution(state_f1_temp(:,:,n),kernel_f1(:,:,n));
 end
 end
+
